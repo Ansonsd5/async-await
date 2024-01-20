@@ -3,12 +3,24 @@ const cart = ["apple", "banana", "mango", "orange", "pineapple"];
 createOrder(cart)
   .then((res) => {
     console.log(res.msg);
-    return res.orderId;
+    return res?.orderId;
   })
   .then((res) => {
     return proceedToPayment(res.orderid);
+    // console.log(proceedToPayment(res.orderId));
   })
-  .then((paymentInfo ) => console.log(paymentInfo))
+  .then((res) => {
+    console.log(res?.paymentInfo);
+    return res.paymentInfo.totalCost;
+  })
+  .then((res) => {
+    return applyCouponCode(res?.paymentInfo?.totalCost);
+  })
+
+  .then((res) => {
+    console.log(res);
+  })
+
   .catch((err) => console.log(err.message));
 
 // const promiseData = createOrder(cart);
@@ -34,7 +46,7 @@ function createOrder(cart) {
 
     setTimeout(() => {
       if (orderId) {
-        resolve({ msg: `The order id is ${orderId}`, orderid: orderId });
+        resolve({ msg: `The order id is ${orderId}`, orderId: orderId });
       }
     }, 1000);
   });
@@ -42,9 +54,8 @@ function createOrder(cart) {
 }
 
 const proceedToPayment = (orderId) => {
-  debugger;
   const proceedPayMentPromise = new Promise((res, rej) => {
-    if (!(orderId.length > 3)) {
+    if (false) {
       const err = new Error("Not a valid order Id");
       rej(err);
     }
@@ -53,10 +64,22 @@ const proceedToPayment = (orderId) => {
       paymentInfo: {
         totalCost: 4500,
         transactionId: "32454fdvdbvdbd",
-        date: new getData(),
+        date: "12/04/2024",
       },
     });
   });
 
   return proceedPayMentPromise;
+};
+
+const applyCouponCode = (totalCost) => {
+  const applyCouponCodePromise = new Promise((res, rej) => {
+    if (totalCost < 3000) {
+      rej("Not applicable for Coupon");
+    }
+
+    res("Your coupon code is ******");
+  });
+
+  return applyCouponCodePromise;
 };
