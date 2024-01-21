@@ -5,6 +5,7 @@ const cart = [
   { item: "shorts", price: "500" },
 ];
 
+//initial wallet balance
 let wallet = 4000;
 
 
