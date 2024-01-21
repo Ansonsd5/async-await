@@ -7,6 +7,7 @@ const cart = [
 
 let wallet = 4000;
 
+
 const createOrder = (cart) => {
   const createOrderPromise = new Promise((resolve, reject) => {
     if (!cart) {
@@ -51,12 +52,15 @@ const updateWallet = (res) => {
     }
     if (wallet > totalCost) {
       wallet = wallet - totalCost;
+      console.log("To amount of Purchase is ", parseInt(totalCost));
       res(`Updated wallet balance is ${wallet}`);
     }
   });
   return walletPromise;
 };
 
+
+console.log("The initial wallet balance is ", wallet);
 
 createOrder(cart)
   .then((res) => proceedToPayment(res))
