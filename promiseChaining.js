@@ -4,8 +4,14 @@ const cart = [
   { item: "kutha", price: "650" },
   { item: "shorts", price: "500" },
 ];
+let wallet = 4700;
+const amount = document.querySelector('#amount');
 
-let wallet = 4000;
+amount.innerHTML=wallet;
+
+
+
+//initial wallet balance
 
 
 const createOrder = (cart) => {
@@ -20,45 +26,48 @@ const createOrder = (cart) => {
 };
 
 const proceedToPayment = (res) => {
-    const {orderid}=res;
-  const proceedPayMentPromise = new Promise((res, rej) => {
+  const orderid = res;
+  const proceedPaymentPromise = new Promise((res, rej) => {
     if (!orderid) {
       rej("no order id");
     }
     res({ orderDetails: { transationId: "trxs83993938378", price: 2900 } });
   });
-  return proceedPayMentPromise;
+  return proceedPaymentPromise;
 };
 
 const showOrderSummary = (res) => {
-  const { transationId } = res.orderDetails;
+  const orderDetails = res;
 
   const summaryPromise = new Promise((res, rej) => {
-    if (!transationId) {
+    if (orderDetails.transationId) {
       rej("No transation id");
     }
 
-    res({ totalCost: "2900", paid: "true" });
+    res({ totalCost: 2900, paid: "true" });
   });
 
   return summaryPromise;
 };
 
 const updateWallet = (res) => {
-  const { totalCost, paid } = res;
+  const totalCost = res.totalCost;
   const walletPromise = new Promise((res, rej) => {
-    if (!paid) {
+    if (!totalCost) {
       rej("Payment not yet updated");
     }
-    if (wallet > totalCost) {
-      wallet = wallet - totalCost;
-      console.log("To amount of Purchase is ", parseInt(totalCost));
-      res(`Updated wallet balance is ${wallet}`);
+    if (wallet) {
+      if (wallet > totalCost) {
+        wallet = wallet - totalCost;
+        console.log("To amount of Purchase is ", totalCost);
+        res(`Updated wallet balance is ${wallet}`);
+      } else {
+        rej("Low Balance cant proceed ");
+      }
     }
   });
   return walletPromise;
 };
-
 
 console.log("The initial wallet balance is ", wallet);
 
