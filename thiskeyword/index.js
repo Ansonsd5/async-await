@@ -79,3 +79,5 @@ let arrowObj ={
     }
 }
 arrowObj.arrow()
+
+// using this key word on dom will give use the refernce of html element
